@@ -1,3 +1,4 @@
 env/
 prototype/
 __pycache__/
+.vscode/
