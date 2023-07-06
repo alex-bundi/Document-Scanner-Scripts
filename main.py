@@ -65,16 +65,30 @@ class ScanDocument:
         return self.filters
 
     def choose_file_type(self):
+        """ Gets input on which file type extension to scan and returns the specified file type extension."""
         
         self.all_file_names
-        self.pick_type = input("Which file type(s) do you want to scan? ").strip().lower()
-        
-        if self.pick_type == ".txt": # Read .txt files
-            self.txt_files = filter(lambda file_name: file_name.endswith('.txt'), self.all_file_names)
-            self.file_type_filter(ftype= ".txt")
-            print(f"{list(self.txt_files)}\n") # Counter the filter object returned by txt_files
+        self.pick_type = input("Which file type(s) do you want to scan? (.txt, .docx, .pdf) ").strip().lower()
+        while True:
+            if self.pick_type == ".txt": # Read .txt files
+                self.txt_files = self.file_type_filter(ftype= ".txt")
+                print(f"{list(self.txt_files)}\n") # Counter the filter object returned by txt_files
+                self.txt_data = self.read_contents.read_txt(files_src= self.src_dir, files_present= self.present_files)
 
-            self.read_contents.read_txt(files_src= self.src_dir, files_present= self.present_files)
+                return self.txt_data
+            else:
+                self.repick_type = input("Invalid extension type; try again.\n Which file types do you want to scan? ").strip().lower()
+                self.supported_ext = [".txt", ".docx", ".pdf"]
+                if self.repick_type in self.supported_ext:
+                    break
+                else:
+                    self.repick_type # Add attempt limit.
+
+        
+       
+
+                    
+
 
 
 

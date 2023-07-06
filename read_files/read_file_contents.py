@@ -5,9 +5,10 @@ class ReadContents:
 
     def read_txt(self, files_src, files_present):
         """Only reads documents with the file extension .txt"""
+        
         self.files_src = files_src
         self.files_present = files_present
-        
+        self.txt_lines = []
 
         for file_name, file_ext in self.files_present:
             if file_ext == ".txt":
@@ -17,4 +18,5 @@ class ReadContents:
                     self.content = scanned_file.read()
                     self.txt_info["filename"] = file_name
                     self.txt_info["content"] = self.content.replace("\n", "").lower()
-                print(self.txt_info)
+                self.txt_lines.append(self.txt_info)        
+        return self.txt_lines
