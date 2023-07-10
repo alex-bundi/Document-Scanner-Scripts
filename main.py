@@ -68,40 +68,31 @@ class ScanDocument:
         """ Gets input on which file type extension to scan and returns the specified file type extension."""
         
         self.all_file_names
+        self.supported_ext = [".txt", ".docx", ".pdf"]
         self.pick_type = input("Which file type(s) do you want to scan? (.txt, .docx, .pdf) ").strip().lower()
+
         while True:
-            if self.pick_type == ".txt": # Read .txt files
-                self.txt_files = self.file_type_filter(ftype= ".txt")
-                print(f"{list(self.txt_files)}\n") # Counter the filter object returned by txt_files
-                self.txt_data = self.read_contents.read_txt(files_src= self.src_dir, files_present= self.present_files)
+            if self.pick_type in self.supported_ext:
+                if self.pick_type == ".txt": # Read .txt files
+                    self.txt_files = self.file_type_filter(ftype= ".txt")
+                    print(f"{list(self.txt_files)}\n") # Counter the filter object returned by txt_files
+                    self.txt_data = self.read_contents.read_txt(files_src= self.src_dir, files_present= self.present_files)
 
-                return self.txt_data
-            else:
-                self.repick_type = input("Invalid extension type; try again.\n Which file types do you want to scan? ").strip().lower()
-                self.supported_ext = [".txt", ".docx", ".pdf"]
-                if self.repick_type in self.supported_ext:
+                    return self.txt_data
+                
+                elif self.pick_type == ".docx":
+                    self.docx_files = self.file_type_filter(ftype= ".docx")
+                    print(f"{list(self.docx_files)}\n")
+                    self.docx_data = self.read_contents.read_docx(files_src= self.src_dir, files_present= self.present_files)
                     break
-                else:
-                    self.repick_type # Add attempt limit.
-
-        
-       
-
-                    
-
-
-
-
-
-
-        
+            else:
+                self.pick_type = input("Invalid extension type; try again. Which file types do you want to scan? ").strip().lower()
+                pass
 
 
 def main():
     scan_document = ScanDocument()
-
     scan_document.choose_file_type()
-    
 
 if __name__ == "__main__":
     main()
