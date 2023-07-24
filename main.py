@@ -59,7 +59,7 @@ class ScanDocument:
             self.__all_file_names.append(file_name)
 
     def file_type_filter(self, ftype):
-        """"Filters functionality for files in specified directory according to thier extension."""
+        """"Filters functionality for files in specified directory according to their file extension."""
         self.ftype = ftype
         self.filters = filter(lambda file_name: file_name.endswith(self.ftype), self.all_file_names)
         return self.filters
@@ -73,18 +73,25 @@ class ScanDocument:
 
         while True:
             if self.pick_type in self.supported_ext:
+
                 if self.pick_type == ".txt": # Read .txt files
                     self.txt_files = self.file_type_filter(ftype= ".txt")
                     print(f"{list(self.txt_files)}\n") # Counter the filter object returned by txt_files
                     self.txt_data = self.read_contents.read_txt(files_src= self.src_dir, files_present= self.present_files)
-
                     return self.txt_data
                 
                 elif self.pick_type == ".docx":
                     self.docx_files = self.file_type_filter(ftype= ".docx")
                     print(f"{list(self.docx_files)}\n")
                     self.docx_data = self.read_contents.read_docx(files_src= self.src_dir, files_present= self.present_files)
-                    break
+                    return self.docx_data
+                
+                elif self.pick_type == ".pdf":
+                    self.pdf_files = self.file_type_filter(ftype= ".pdf")
+                    print(f"{list(self.pdf_files)}\n")
+                    self.pdf_data = self.read_contents.read_pdf(files_src= self.src_dir, files_present= self.present_files)
+                    return self.pdf_data
+            
             else:
                 self.pick_type = input("Invalid extension type; try again. Which file types do you want to scan? ").strip().lower()
                 pass
