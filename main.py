@@ -11,11 +11,14 @@ class ScanDocument:
         self.__all_file_names = []
         self.store_file_names() # Populates file names only once.
 
+    @classmethod
+    def beautify_output(cls):
+        print(f"{'-' * 140}")
     
     @classmethod
     def get_docs(cls):
         """Prompts the user for a directory containing only the files to scan/read."""
-
+        cls.beautify_output()
         cls.dir_path = input("Directory: ").strip()
         cls.attempts = 0
         cls.max_attempts = 5
@@ -32,19 +35,22 @@ class ScanDocument:
             cls.attempts += 1     
 
     def get_files(self) -> None:
-        """Retrieves exclusively the files located in the returned directory by the getdoc() function."""
+        """Retrieves exclusively the files located in the returned directory by the getdoc function."""
         self.get_docs()
 
         self.present_files = [(files.name, files.suffix) for files in self.src_dir.iterdir() if files.is_file()]
+        self.beautify_output()
         print("Files in Root Directory:", )
 
         self.ext = {}
         for file_name, file_extension in self.present_files:
-            print(file_name, end= ", ") # File names
+            print(file_name,end= ", ") # File names
             self.ext[file_extension] = self.ext.get(file_extension, 0) + 1 # File extensions.
+        print()
 
-        print("\n")
+        self.beautify_output()
         print(f"Extensions:\n{self.ext}\n")
+        self.beautify_output()
 
     @property
     def all_file_names(self): # To avoid modification of the list.
@@ -54,14 +60,14 @@ class ScanDocument:
         """Stores all file names in specified directory."""
 
         self.get_files()
-
         for file_name, file_extension in self.present_files:
             self.__all_file_names.append(file_name)
 
     def file_type_filter(self, ftype):
         """"Filters functionality for files in specified directory according to their file extension."""
+
         self.ftype = ftype
-        self.filters = filter(lambda file_name: file_name.endswith(self.ftype), self.all_file_names)
+        self.filters = filter(lambda file_name: file_name.endswith(ftype), self.all_file_names)
         return self.filters
 
     def choose_file_type(self):
@@ -77,18 +83,22 @@ class ScanDocument:
                 if self.pick_type == ".txt": # Read .txt files
                     self.txt_files = self.file_type_filter(ftype= ".txt")
                     print(f"{list(self.txt_files)}\n") # Counter the filter object returned by txt_files
+                    self.beautify_output()
                     self.txt_data = self.read_contents.read_txt(files_src= self.src_dir, files_present= self.present_files)
-                    return self.txt_data
+                    print(self.txt_data)
+                    break
                 
                 elif self.pick_type == ".docx":
                     self.docx_files = self.file_type_filter(ftype= ".docx")
                     print(f"{list(self.docx_files)}\n")
+                    self.beautify_output()
                     self.docx_data = self.read_contents.read_docx(files_src= self.src_dir, files_present= self.present_files)
                     return self.docx_data
                 
                 elif self.pick_type == ".pdf":
                     self.pdf_files = self.file_type_filter(ftype= ".pdf")
                     print(f"{list(self.pdf_files)}\n")
+                    self.beautify_output()
                     self.pdf_data = self.read_contents.read_pdf(files_src= self.src_dir, files_present= self.present_files)
                     return self.pdf_data
             
