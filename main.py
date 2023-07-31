@@ -1,5 +1,6 @@
 from pathlib import Path
 from read_files import ReadContents
+import re
 
 class ScanDocument:
     """ 
@@ -79,37 +80,63 @@ class ScanDocument:
 
         while True:
             if self.pick_type in self.supported_ext:
-
-                if self.pick_type == ".txt": # Read .txt files
-                    self.txt_files = self.file_type_filter(ftype= ".txt")
-                    print(f"{list(self.txt_files)}\n") # Counter the filter object returned by txt_files
-                    self.beautify_output()
-                    self.txt_data = self.read_contents.read_txt(files_src= self.src_dir, files_present= self.present_files)
-                    print(self.txt_data)
-                    break
-                
-                elif self.pick_type == ".docx":
-                    self.docx_files = self.file_type_filter(ftype= ".docx")
-                    print(f"{list(self.docx_files)}\n")
-                    self.beautify_output()
-                    self.docx_data = self.read_contents.read_docx(files_src= self.src_dir, files_present= self.present_files)
-                    return self.docx_data
-                
-                elif self.pick_type == ".pdf":
-                    self.pdf_files = self.file_type_filter(ftype= ".pdf")
-                    print(f"{list(self.pdf_files)}\n")
-                    self.beautify_output()
-                    self.pdf_data = self.read_contents.read_pdf(files_src= self.src_dir, files_present= self.present_files)
-                    return self.pdf_data
-            
+                return self.pick_type
             else:
                 self.pick_type = input("Invalid extension type; try again. Which file types do you want to scan? ").strip().lower()
                 pass
 
+    def parse_selected_file(self):
+        self.choose_file_type()
+       
+        if self.pick_type == ".txt": # Read .txt files
+            self.txt_files = self.file_type_filter(ftype= ".txt")
+            print(f"{list(self.txt_files)}\n") # Counter the filter object returned by txt_files
+            self.beautify_output()
+            self.txt_data = self.read_contents.read_txt(files_src= self.src_dir, files_present= self.present_files)
+            return self.txt_data
+                    
+        elif self.pick_type == ".docx":
+            self.docx_files = self.file_type_filter(ftype= ".docx")
+            print(f"{list(self.docx_files)}\n")
+            self.beautify_output()
+            self.docx_data = self.read_contents.read_docx(files_src= self.src_dir, files_present= self.present_files)
+            return self.docx_data
+                    
+        elif self.pick_type == ".pdf":
+            self.pdf_files = self.file_type_filter(ftype= ".pdf")
+            print(f"{list(self.pdf_files)}\n")
+            self.beautify_output()
+            self.pdf_data = self.read_contents.read_pdf(files_src= self.src_dir, files_present= self.present_files)
+            return self.pdf_data
+
+    def search_files(self):
+        self.parsed_contents = self.parse_selected_file()
+        self.search_parameter = repr(input("Find what: ").lower().strip())
+
+        self.pattern = re.compile(self.search_parameter, re.IGNORECASE)
+        self.match_found = False
+        print(self.pattern)
+        """if self.parsed_contents is None: # To counter--> Object of type "None" cannot be used as iterable value
+            print(True)
+        else:
+            for all_values in self.parsed_contents: 
+                for characters in all_values.values():
+                    self.fp_matches = re.search(self.pattern, characters)
+                    print(characters)
+                    if self.fp_matches:
+                        self.matched_text = self.fp_matches.group()
+                        print(self.matched_text)
+                        print(f"Match found: {characters}")
+                        self.match_found = True
+                        break
+            if not self.match_found:
+                print("No match found.")"""
+
+
 
 def main():
     scan_document = ScanDocument()
-    scan_document.choose_file_type()
+    scan_document.search_files()
 
 if __name__ == "__main__":
     main()
