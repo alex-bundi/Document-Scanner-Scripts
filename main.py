@@ -115,22 +115,21 @@ class ScanDocument:
 
         self.pattern = re.compile(self.search_parameter, re.IGNORECASE)
         self.match_found = False
-        print(self.pattern)
-        """if self.parsed_contents is None: # To counter--> Object of type "None" cannot be used as iterable value
-            print(True)
-        else:
-            for all_values in self.parsed_contents: 
+        
+        if self.parsed_contents is None: # To counter--> Object of type "None" cannot be used as iterable value
+            print(None)
+        elif isinstance(self.parsed_contents, list):
+            for all_values in self.parsed_contents:
                 for characters in all_values.values():
                     self.fp_matches = re.search(self.pattern, characters)
-                    print(characters)
                     if self.fp_matches:
                         self.matched_text = self.fp_matches.group()
-                        print(self.matched_text)
                         print(f"Match found: {characters}")
                         self.match_found = True
                         break
             if not self.match_found:
-                print("No match found.")"""
+                print("No match found.")
+            
 
 
 
